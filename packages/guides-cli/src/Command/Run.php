@@ -50,7 +50,7 @@ final class Run extends Command
         private readonly Logger $logger,
         private readonly ThemeManager $themeManager,
         private readonly SettingsManager $settingsManager,
-        private readonly ClockInterface $clock,
+        private ClockInterface $clock,
     ) {
         parent::__construct('run');
 
@@ -281,5 +281,10 @@ final class Run extends Command
         }
 
         return $absolutePath;
+    }
+
+    public function setClock(ClockInterface $clock): void
+    {
+        $this->clock = $clock;
     }
 }

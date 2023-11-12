@@ -9,6 +9,7 @@ use phpDocumentor\Guides\ApplicationTestCase;
 use phpDocumentor\Guides\Cli\Command\Run;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\ExpectationFailedException;
+use Symfony\Component\Clock\MockClock;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Finder\Finder as SymfonyFinder;
@@ -39,6 +40,7 @@ class IntegrationTest extends ApplicationTestCase
     protected function setUp(): void
     {
         setlocale(LC_ALL, 'en_US.utf8');
+        // todo: mock time
     }
 
     /** @param String[] $compareFiles */
@@ -64,8 +66,12 @@ class IntegrationTest extends ApplicationTestCase
             system('mkdir ' . escapeshellarg($outputPath));
 
             $this->prepareContainer($configurationFile);
+
             $command = $this->getContainer()->get(Run::class);
+
             assert($command instanceof Run);
+
+            $command->setClock(new MockClock('2023-01-01 12:00:00'));
 
             $input = new ArrayInput(
                 [
